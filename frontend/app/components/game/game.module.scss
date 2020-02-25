@@ -1,0 +1,41 @@
+$canvasBackground: #eee;
+$canvasBackgroundRed: #e4b9b9;
+$canvasBackgroundBlue: #9dc4e0;
+
+.hide {
+    display: None;
+}
+
+li {
+    list-style: none;
+}
+
+.flexContainer {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.gameStateContainer {
+    flex: 0 1 50%;
+}
+
+.redText {
+    color: #b90000;
+}
+
+.blueText {
+    color: #0000af;
+}
+
+.canvasContainerLeft {
+    flex: 0 0 50%;
+}
+
+.canvasContainerRight {
+    width: 50%;
+}
+
+canvas {
+    background: $canvasBackground;
+}

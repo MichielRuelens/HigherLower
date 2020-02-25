@@ -1,0 +1,82 @@
+body {
+    padding: 10px;
+}
+
+.header {
+    display: flex;
+    width: 100%;
+    height: 390px;
+    margin-bottom: 10px;
+}
+
+.leftHeader {
+    flex: 0 1 100%;
+    background-image: url("../assets/images/canasta_header_left.png");
+    background-repeat: repeat; /* Do not repeat the image */
+}
+
+.middleHeader {
+    flex: 0 0 1021px;
+    background-image: url("../assets/images/canasta_header.png");
+    background-repeat: no-repeat; /* Do not repeat the image */
+    background-size: cover; /* Resize the background image to cover the entire container */
+}
+
+.rightHeader {
+    flex: 0 1 100%;
+    background-image: url("../assets/images/canasta_header_right.png");
+    background-repeat: repeat; /* Do not repeat the image */
+}
+
+button {
+    cursor: pointer;
+    background-color: #008CBA; /* blue */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-right: 2px;
+}
+
+button:hover {
+    background-color: #123456; /* dark blue */
+}
+
+button:disabled {
+    background-color: #5d5d5d; /* grey */
+    cursor: default;
+}
+
+button.redButton {
+    background-color: #f44336; /* red */
+}
+
+button.redButton:hover {
+    background-color: #d20e00; /* dark red */
+}
+
+button.redButton:disabled {
+    background-color: #5d5d5d; /* grey */
+    cursor: default;
+}
+
+ul {
+    padding-left: 0px;
+}
+
+li.gameSelector {
+    cursor: pointer;
+    line-height: 25px;
+    list-style: none;
+    margin: 5px;
+    padding-left: 5px;
+    border-left: 5px solid #aaa;
+}
+
+li.gameSelector:hover {
+    border-left: 5px solid #123456;
+    font-weight: bold;
+}
