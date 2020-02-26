@@ -1,3 +1,4 @@
+import numpy as np
 import logging
 from typing import Optional, List
 
@@ -94,8 +95,8 @@ class CanastaEnv(Env):
         self.game.reset_game(initialize=True)
         return self._get_state()
 
-    def _get_state(self) -> List[int]:
-        return self.game.get_state().create_numeral_representation(self.game.current_player)
+    def _get_state(self) -> np.array:
+        return np.array(self.game.get_state().create_numeral_representation(self.game.current_player), dtype=np.float32)
 
     def render(self, mode='human'):
         pass

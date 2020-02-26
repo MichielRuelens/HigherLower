@@ -17,7 +17,7 @@ class MyModel(tf.keras.Model):
         for i in num_hidden_units:
             self.hidden_layers.append(tf.keras.layers.Dense(i, activation='tanh', kernel_initializer='RandomNormal'))
         self.output_layer = tf.keras.layers.Dense(
-            num_actions, activation='linear', kernel_initializer='RandomNormal')
+            num_actions, activation='softmax', kernel_initializer='RandomNormal')
 
     @tf.function
     def call(self, inputs: Dict[str, Any]):
@@ -136,10 +136,10 @@ def main():
 
     train_net = DQN(num_states, num_actions, hidden_units, gamma, max_experiences, min_experiences, batch_size, lr)
     target_net = DQN(num_states, num_actions, hidden_units, gamma, max_experiences, min_experiences, batch_size, lr)
-    number_iterations = 50
+    number_iterations = 1000
     total_rewards = np.empty(number_iterations)
     epsilon = 0.99
-    decay = 0.9999
+    decay = 0.995
     min_epsilon = 0.1
     avg_rewards = 0
     for n in range(number_iterations):
