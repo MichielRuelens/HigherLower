@@ -1,5 +1,6 @@
 from typing import List, Optional
 
+from ai.model_configs.mlp_config import MLPConfig
 from base.board import Board
 from base.cards.deck import Deck
 from base.cards.hand import Hand
@@ -7,6 +8,7 @@ from base.constants import Constants
 from base.enums.game_phase import GamePhase
 from base.game_history import GameHistory
 from base.game_state import GameState
+from base.players.ai_player import AIPlayer
 from base.players.human_player import HumanPlayer
 from base.players.player import Player
 from base.players.random_player import RandomPlayer
@@ -98,6 +100,8 @@ class Game:
                 self.players.append(HumanPlayer(i))
             elif i in Constants.RANDOM_PLAYER_INDEXES:
                 self.players.append(RandomPlayer(i))
+            elif i in Constants.AI_PLAYER_INDEXES:
+                self.players.append(AIPlayer(i, MLPConfig()))
 
     @staticmethod
     def _create_deck() -> Deck:
