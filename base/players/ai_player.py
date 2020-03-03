@@ -41,3 +41,9 @@ class AIPlayer(Player):
         predictions = proper_predictions + masked_predictions
         action_idx = np.argmax(predictions[0])  # type: int
         return self.action_service.idx_to_action(action_idx)
+
+
+if __name__ == '__main__':
+    p = AIPlayer()
+    print(p)
+    print(p.model)
