@@ -44,6 +44,6 @@ class AIPlayer(Player):
 
 
 if __name__ == '__main__':
-    p = AIPlayer()
+    p = AIPlayer(1)
     print(p)
     print(p.model)
