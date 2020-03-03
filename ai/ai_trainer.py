@@ -17,18 +17,15 @@ class MyModel(tf.keras.Model):
         for i in num_hidden_units:
             self.hidden_layers.append(tf.keras.layers.Dense(i, activation='tanh', kernel_initializer='RandomNormal'))
         self.output_layer = tf.keras.layers.Dense(
-            num_actions, activation='softmax', kernel_initializer='RandomNormal')
+            num_actions, activation='linear', kernel_initializer='RandomNormal')
 
     @tf.function
     def call(self, inputs: Dict[str, Any]):
         state = inputs['state']
-        mask = inputs['mask']
         z = self.input_layer(state)
         for layer in self.hidden_layers:
             z = layer(z)
         output = self.output_layer(z)
-        output *= tf.cast(mask, tf.float32)   # apply mask
-        # output /= tf.norm(output, axis=1)   # renormalize
         return output
 
 
@@ -43,8 +40,8 @@ class DQN:
         self.max_experiences = max_experiences
         self.min_experiences = min_experiences
 
-    def predict(self, state, masks):
-        inputs = {'state': np.atleast_2d(state), 'mask': np.atleast_2d(masks)}
+    def predict(self, state):
+        inputs = {'state': np.atleast_2d(state)}
         return self.model(inputs)
 
     @tf.function
@@ -53,7 +50,6 @@ class DQN:
             return 0
         ids = np.random.randint(low=0, high=len(self.experience['s']), size=self.batch_size)
         states = np.asarray([self.experience['s'][i] for i in ids])
-        masks = np.asarray([self.experience['m'][i] for i in ids])
         actions = np.asarray([self.experience['a'][i] for i in ids])
         rewards = np.asarray([self.experience['r'][i] for i in ids])
         states_next = np.asarray([self.experience['s2'][i] for i in ids])
@@ -63,7 +59,7 @@ class DQN:
 
         with tf.GradientTape() as tape:
             selected_action_values = tf.math.reduce_sum(
-                self.predict(states, masks) * tf.one_hot(actions, self.num_actions), axis=1)
+                self.predict(states) * tf.one_hot(actions, self.num_actions), axis=1)
             loss = tf.math.reduce_sum(tf.square(actual_values - selected_action_values))
         variables = self.model.trainable_variables
         gradients = tape.gradient(loss, variables)
@@ -74,7 +70,9 @@ class DQN:
             valid_actions_indexes = [idx for idx, is_valid in enumerate(mask) if is_valid]
             return np.random.choice(valid_actions_indexes)
         else:
-            return np.argmax(self.predict(np.atleast_2d(states), np.atleast_2d(mask))[0])
+            prediction = self.predict(np.atleast_2d(states))
+            prediction *= np.atleast_2d(mask)
+            return np.argmax(prediction[0])
 
     def add_experience(self, exp):
         if len(self.experience['s']) >= self.max_experiences:
@@ -154,6 +152,7 @@ def main():
             print("episode:", n, "episode reward:", total_reward, "eps:", epsilon, "avg reward (last 100):", avg_rewards)
     print("avg reward for last 100 episodes:", avg_rewards)
     env.close()
+    train_net.model.save("trained_net")
 
 
 if __name__ == '__main__':
