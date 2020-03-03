@@ -1,13 +1,14 @@
-from typing import Dict, Any
+from typing import Dict, Any, TYPE_CHECKING
 
 import tensorflow as tf
 
-from ai.model_configs.mlp_config import MLPConfig
+if TYPE_CHECKING:
+    from ai.model_configs.mlp_config import MLPConfig
 
 
 class MultiLayerPerceptron(tf.keras.Model):
 
-    def __init__(self, config: MLPConfig):
+    def __init__(self, config: 'MLPConfig'):
         super(MultiLayerPerceptron, self).__init__()
         self.input_layer = tf.keras.layers.InputLayer(input_shape=(config.num_states,))
         self.hidden_layers = []
