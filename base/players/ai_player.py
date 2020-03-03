@@ -1,7 +1,6 @@
 from typing import TYPE_CHECKING
 
 import numpy as np
-import tensorflow as tf
 
 from ai.multi_layer_perceptron import MultiLayerPerceptron
 from base.actions.action_service import ActionService
@@ -26,7 +25,7 @@ class AIPlayer(Player):
         model.load_weights("models/mlp_weights")
         return model
 
-    def _predict(self, game_state: GameState):
+    def _predict(self, game_state: 'GameState'):
         return self.model.predict({"state": np.atleast_2d(game_state.create_numeral_representation(self))})
 
     @property
