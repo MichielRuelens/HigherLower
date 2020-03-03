@@ -1,32 +1,12 @@
 import datetime
 from collections import defaultdict
-from typing import Any, Dict
 
 import numpy as np
 import tensorflow as tf
 
-from base.actions.action_service import ActionService
 from ai.ai_env import CanastaEnv
-
-
-class MyModel(tf.keras.Model):
-    def __init__(self, num_states, num_hidden_units, num_actions):
-        super(MyModel, self).__init__()
-        self.input_layer = tf.keras.layers.InputLayer(input_shape=(num_states,))
-        self.hidden_layers = []
-        for i in num_hidden_units:
-            self.hidden_layers.append(tf.keras.layers.Dense(i, activation='tanh', kernel_initializer='RandomNormal'))
-        self.output_layer = tf.keras.layers.Dense(
-            num_actions, activation='linear', kernel_initializer='RandomNormal')
-
-    @tf.function
-    def call(self, inputs: Dict[str, Any]):
-        state = inputs['state']
-        z = self.input_layer(state)
-        for layer in self.hidden_layers:
-            z = layer(z)
-        output = self.output_layer(z)
-        return output
+from ai.multi_layer_perceptron import MultiLayerPerceptron
+from base.actions.action_service import ActionService
 
 
 class DQN:
@@ -35,7 +15,7 @@ class DQN:
         self.batch_size = batch_size
         self.optimizer = tf.optimizers.Adam(lr)
         self.gamma = gamma
-        self.model = MyModel(num_states, hidden_units, num_actions)
+        self.model = MultiLayerPerceptron(num_states, hidden_units, num_actions)
         self.experience = defaultdict(list)
         self.max_experiences = max_experiences
         self.min_experiences = min_experiences
@@ -154,7 +134,7 @@ def main():
             print("episode:", n, "episode reward:", total_reward, "eps:", epsilon, "avg reward (last 100):", avg_rewards)
     print("avg reward for last 100 episodes:", avg_rewards)
     env.close()
-    train_net.model.save("trained_net")
+    train_net.model.save_weights("models/mlp_weights")
 
 
 if __name__ == '__main__':
