@@ -36,6 +36,6 @@ class AIPlayer(Player):
 
 
 if __name__ == '__main__':
-    p = AIPlayer(1)
+    p = AIPlayer(1, MLPConfig())
     print(p)
     print(p.model)
