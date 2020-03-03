@@ -5,6 +5,7 @@ import numpy as np
 import tensorflow as tf
 
 from ai.ai_env import CanastaEnv
+from ai.model_configs.mlp_config import MLPConfig
 from ai.multi_layer_perceptron import MultiLayerPerceptron
 from base.actions.action_service import ActionService
 
@@ -100,28 +101,28 @@ def play_game(env, train_net, target_net, epsilon, copy_step, print_exp_step):
 
 def main():
     env = CanastaEnv()
-    gamma = 0.99
-    copy_step = 25
-    print_exp_step = 100000000
+    cfg = MLPConfig()
+    # ============ CONFIG PARAMETERS =============== #
+    gamma = cfg.gamma
+    copy_step = cfg.copy_step
+    print_exp_step = cfg.print_exp_step
     num_states = env.observation_space.n
     num_actions = env.action_space.n
-    hidden_units = [200, 200]
-    max_experiences = 10000
-    min_experiences = 100
-    batch_size = 32
-    lr = 1e-2
-    current_time = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
-    log_dir = 'logs/dqn/' + current_time
-    summary_writer = tf.summary.create_file_writer(log_dir)
-
+    hidden_units = cfg.hidden_units
+    max_experiences = cfg.max_experiences
+    min_experiences = cfg.min_experiences
+    batch_size = cfg.batch_size
+    lr = cfg.lr
+    number_iterations = cfg.number_iterations
+    total_rewards = np.empty(number_iterations)
+    epsilon = cfg.epsilon
+    decay = cfg.decay
+    min_epsilon = cfg.min_epsilon
+    avg_rewards = cfg.avg_rewards
+    # =============================================== #
+    summary_writer = tf.summary.create_file_writer(cfg.log_dir)
     train_net = DQN(num_states, num_actions, hidden_units, gamma, max_experiences, min_experiences, batch_size, lr)
     target_net = DQN(num_states, num_actions, hidden_units, gamma, max_experiences, min_experiences, batch_size, lr)
-    number_iterations = 1000
-    total_rewards = np.empty(number_iterations)
-    epsilon = 0.99
-    decay = 0.995
-    min_epsilon = 0.1
-    avg_rewards = 0
     for n in range(number_iterations):
         epsilon = max(min_epsilon, epsilon * decay)
         total_reward = play_game(env, train_net, target_net, epsilon, copy_step, print_exp_step)
@@ -134,7 +135,7 @@ def main():
             print("episode:", n, "episode reward:", total_reward, "eps:", epsilon, "avg reward (last 100):", avg_rewards)
     print("avg reward for last 100 episodes:", avg_rewards)
     env.close()
-    train_net.model.save_weights("models/mlp_weights")
+    train_net.model.save_weights(cfg.save_path)
 
 
 if __name__ == '__main__':
