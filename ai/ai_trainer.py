@@ -3,7 +3,7 @@ from collections import defaultdict
 import numpy as np
 import tensorflow as tf
 
-from ai.ai_env import CanastaEnv, HigherLowerEnv
+from ai.ai_env import HigherLowerEnv
 from ai.model_configs.mlp_config import MLPConfig
 from ai.multi_layer_perceptron import MultiLayerPerceptron
 from base.actions.action_service import ActionService
