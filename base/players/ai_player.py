@@ -5,9 +5,9 @@ import numpy as np
 from ai.multi_layer_perceptron import MultiLayerPerceptron
 from base.actions.action_service import ActionService
 from base.players.player import Player
+from base.game_state import GameState
 
 if TYPE_CHECKING:
-    from base.game_state import GameState
     from base.actions.action import Action
 
 
