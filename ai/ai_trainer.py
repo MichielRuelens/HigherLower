@@ -71,13 +71,9 @@ class DQN:
             return np.random.choice(valid_actions_indexes)
         else:
             predictions = self.predict(np.atleast_2d(state))
-            print(predictions)
             proper_predictions = predictions * np.atleast_2d(mask)
-            masked_predictions = np.atleast_2d(np.logical_not(mask) * np.min(predictions))
+            masked_predictions = np.atleast_2d(np.logical_not(mask) * (np.min(predictions) - 1))
             predictions = proper_predictions + masked_predictions
-            print(predictions)
-            print(proper_predictions)
-            print(masked_predictions)
             return np.argmax(predictions[0])
 
     def add_experience(self, exp):
