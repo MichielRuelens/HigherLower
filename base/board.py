@@ -19,7 +19,7 @@ class Board:
     def __str__(self):
         print_str = ""
         print_str += "-------------------- BOARD ----------------------" + "\n"
-        print_str += "Phase".format(self.phase) + "\n"
+        print_str += "Phase: {}".format(self.phase) + "\n"
         print_str += "Deck: {} cards left".format(self.deck.num_cards()) + "\n"
         print_str += "{}".format(self.stack) + "\n"
         print_str += "------------------------------------------------" + "\n"
