@@ -65,14 +65,16 @@ class DQN:
         gradients = tape.gradient(loss, variables)
         self.optimizer.apply_gradients(zip(gradients, variables))
 
-    def get_action(self, states, mask, epsilon):
-        # if np.random.random() < epsilon:
-        valid_actions_indexes = [idx for idx, is_valid in enumerate(mask) if is_valid]
-        return np.random.choice(valid_actions_indexes)
-        # else:
-        #     prediction = self.predict(np.atleast_2d(states))
-        #     prediction *= np.atleast_2d(mask)
-        #     return np.argmax(prediction[0])
+    def get_action(self, state, mask, epsilon):
+        if np.random.random() < epsilon:
+            valid_actions_indexes = [idx for idx, is_valid in enumerate(mask) if is_valid]
+            return np.random.choice(valid_actions_indexes)
+        else:
+            predictions = self.predict(np.atleast_2d(state))
+            proper_predictions = predictions * np.atleast_2d(mask)
+            masked_predictions = np.atleast_2d(np.logical_not(mask) * np.min(predictions))
+            predictions = proper_predictions + masked_predictions
+            return np.argmax(predictions[0])
 
     def add_experience(self, exp):
         if len(self.experience['s']) >= self.max_experiences:
@@ -92,18 +94,18 @@ def play_game(env, train_net, target_net, epsilon, copy_step, print_exp_step):
     rewards = 0
     iteration = 0
     done = False
-    observations = env.reset()
+    state = env.reset()
     while not done:
         actions_mask = env.get_current_actions_mask()
-        action = train_net.get_action(observations, actions_mask, epsilon)
-        prev_observations = observations
-        observations, reward, done, _ = env.step(action)
+        action = train_net.get_action(state, actions_mask, epsilon)
+        prev_state = state
+        state, reward, done, _ = env.step(action)
         rewards += reward
         if done:
             reward = -10
             env.reset()
 
-        exp = {'s': prev_observations, 'a': action, 'r': reward, 'm': actions_mask, 's2': observations, 'done': done}
+        exp = {'s': prev_state, 'a': action, 'r': reward, 'm': actions_mask, 's2': state, 'done': done}
         train_net.add_experience(exp)
         train_net.train(target_net)
         iteration += 1
