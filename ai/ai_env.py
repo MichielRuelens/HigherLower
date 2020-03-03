@@ -1,14 +1,13 @@
-import numpy as np
 import logging
-from typing import Optional, List
+from typing import Optional
 
+import numpy as np
 from gym import Env, spaces
 
+from ai.controlled_game import ControlledGame
 from base.actions.action import Action
 from base.actions.action_service import ActionService
-from ai.controlled_game import ControlledGame
 from base.enums.game_phase import GamePhase
-from base.game_state import GameState
 
 
 class CanastaEnv(Env):
@@ -16,7 +15,7 @@ class CanastaEnv(Env):
     An implementation of the OpenAI environment class for the Canasta game.
     """
 
-    def __init__(self):
+    def __init__(self, num_actions, state_size):
         self.__version__ = "0.1.0"
         logging.info("HigherLower - Version {}".format(self.__version__))
 
@@ -25,10 +24,10 @@ class CanastaEnv(Env):
         self.curr_step = -1
 
         # Define what the agent can do, each action in the game has a unique index
-        self.action_space = spaces.Discrete(ActionService().num_actions)
+        self.action_space = spaces.Discrete(num_actions)
 
         # Not sure yet what to do with the observation space
-        self.observation_space = spaces.Discrete(GameState.SIZE)
+        self.observation_space = spaces.Discrete(state_size)
 
         # Store what the agent tried
         self.curr_episode = -1

@@ -1,4 +1,3 @@
-import datetime
 from collections import defaultdict
 
 import numpy as np
@@ -11,12 +10,12 @@ from base.actions.action_service import ActionService
 
 
 class DQN:
-    def __init__(self, num_states, num_actions, hidden_units, gamma, max_experiences, min_experiences, batch_size, lr):
-        self.num_actions = num_actions
+    def __init__(self, model_config: MLPConfig, gamma, max_experiences, min_experiences, batch_size, lr):
+        self.num_actions = model_config.num_actions
         self.batch_size = batch_size
         self.optimizer = tf.optimizers.Adam(lr)
         self.gamma = gamma
-        self.model = MultiLayerPerceptron(num_states, hidden_units, num_actions)
+        self.model = MultiLayerPerceptron(model_config)
         self.experience = defaultdict(list)
         self.max_experiences = max_experiences
         self.min_experiences = min_experiences
@@ -106,8 +105,6 @@ def main():
     gamma = cfg.gamma
     copy_step = cfg.copy_step
     print_exp_step = cfg.print_exp_step
-    num_states = env.observation_space.n
-    num_actions = env.action_space.n
     hidden_units = cfg.hidden_units
     max_experiences = cfg.max_experiences
     min_experiences = cfg.min_experiences
@@ -121,8 +118,8 @@ def main():
     avg_rewards = cfg.avg_rewards
     # =============================================== #
     summary_writer = tf.summary.create_file_writer(cfg.log_dir)
-    train_net = DQN(num_states, num_actions, hidden_units, gamma, max_experiences, min_experiences, batch_size, lr)
-    target_net = DQN(num_states, num_actions, hidden_units, gamma, max_experiences, min_experiences, batch_size, lr)
+    train_net = DQN(cfg, gamma, max_experiences, min_experiences, batch_size, lr)
+    target_net = DQN(cfg, gamma, max_experiences, min_experiences, batch_size, lr)
     for n in range(number_iterations):
         epsilon = max(min_epsilon, epsilon * decay)
         total_reward = play_game(env, train_net, target_net, epsilon, copy_step, print_exp_step)

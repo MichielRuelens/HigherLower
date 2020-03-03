@@ -2,16 +2,19 @@ from typing import Dict, Any
 
 import tensorflow as tf
 
+from ai.model_configs.mlp_config import MLPConfig
+
 
 class MultiLayerPerceptron(tf.keras.Model):
-    def __init__(self, num_states, num_hidden_units, num_actions):
+
+    def __init__(self, config: MLPConfig):
         super(MultiLayerPerceptron, self).__init__()
-        self.input_layer = tf.keras.layers.InputLayer(input_shape=(num_states,))
+        self.input_layer = tf.keras.layers.InputLayer(input_shape=(config.num_states,))
         self.hidden_layers = []
-        for i in num_hidden_units:
+        for i in config.hidden_units:
             self.hidden_layers.append(tf.keras.layers.Dense(i, activation='tanh', kernel_initializer='RandomNormal'))
         self.output_layer = tf.keras.layers.Dense(
-            num_actions, activation='linear', kernel_initializer='RandomNormal')
+            config.num_actions, activation='linear', kernel_initializer='RandomNormal')
 
     @tf.function
     def call(self, inputs: Dict[str, Any]):

@@ -2,10 +2,10 @@ from typing import TYPE_CHECKING
 
 import numpy as np
 
-from ai.multi_layer_perceptron import MultiLayerPerceptron
+from ai.model_configs.mlp_config import MLPConfig
 from base.actions.action_service import ActionService
-from base.players.player import Player
 from base.game_state import GameState
+from base.players.player import Player
 
 if TYPE_CHECKING:
     from base.actions.action import Action
@@ -13,17 +13,10 @@ if TYPE_CHECKING:
 
 class AIPlayer(Player):
 
-    def __init__(self, identifier: int):
+    def __init__(self, identifier: int, config: MLPConfig):
         super().__init__(identifier=identifier)
         self.action_service = ActionService()
-        self.model = self._load_model()
-
-    def _load_model(self):
-        model = MultiLayerPerceptron(num_states=GameState.SIZE,
-                                     num_hidden_units=[200, 200],
-                                     num_actions=self.action_service.num_actions)
-        model.load_weights("models/mlp_weights")
-        return model
+        self.model = config.load_model()
 
     def _predict(self, game_state: 'GameState'):
         return self.model.predict({"state": np.atleast_2d(game_state.create_numeral_representation(self))})
