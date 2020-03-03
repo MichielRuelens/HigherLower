@@ -66,13 +66,13 @@ class DQN:
         self.optimizer.apply_gradients(zip(gradients, variables))
 
     def get_action(self, states, mask, epsilon):
-        if np.random.random() < epsilon:
-            valid_actions_indexes = [idx for idx, is_valid in enumerate(mask) if is_valid]
-            return np.random.choice(valid_actions_indexes)
-        else:
-            prediction = self.predict(np.atleast_2d(states))
-            prediction *= np.atleast_2d(mask)
-            return np.argmax(prediction[0])
+        # if np.random.random() < epsilon:
+        valid_actions_indexes = [idx for idx, is_valid in enumerate(mask) if is_valid]
+        return np.random.choice(valid_actions_indexes)
+        # else:
+        #     prediction = self.predict(np.atleast_2d(states))
+        #     prediction *= np.atleast_2d(mask)
+        #     return np.argmax(prediction[0])
 
     def add_experience(self, exp):
         if len(self.experience['s']) >= self.max_experiences:
