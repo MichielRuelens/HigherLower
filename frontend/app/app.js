@@ -9,6 +9,8 @@ class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+//            apiUrl: 'localhost',
+            apiUrl: 'ec2-35-158-144-118.eu-central-1.compute.amazonaws.com',
             state: null,
             gameId: null,
             runningGames: [],
@@ -36,7 +38,7 @@ class App extends React.Component {
     updateState() {
         if (this.state.gameId != null) {
             const encodedGameId = encodeURIComponent(this.state.gameId);
-            axios.get(`http://localhost:4800/api/state?gameId=${encodedGameId}`)
+            axios.get(`http://${this.state.apiUrl}:4800/api/state?gameId=${encodedGameId}`)
                  .then((res) => {
                      this.setState({ state: JSON.parse(res.data)});
                  }, (error) => {
@@ -46,7 +48,7 @@ class App extends React.Component {
     }
 
     getGameIds() {
-        axios.get('http://localhost:4800/api/games')
+        axios.get(`http://${this.state.apiUrl}:4800/api/games`)
              .then((res) => {
                 this.setState({ runningGames: res.data });
               }, (error) => {
@@ -59,7 +61,7 @@ class App extends React.Component {
     }
 
     newGame() {
-        axios.get('http://localhost:4800/api/game')
+        axios.get(`http://${this.state.apiUrl}:4800/api/game`)
              .then((res) => {
                 this.setState({ gameId: res.data }, this.updateState);
               }, (error) => {
@@ -69,7 +71,7 @@ class App extends React.Component {
 
     playStep() {
         if (this.state.gameId != null) {
-            axios.post('http://localhost:4800/api/game', { gameId: this.state.gameId })
+            axios.post(`http://${this.state.apiUrl}:4800/api/game`, { gameId: this.state.gameId })
               .then((res) => {
                 this.updateState();
               }, (error) => {
@@ -81,7 +83,7 @@ class App extends React.Component {
     playLoop() {
         if (this.state.gameId != null) {
             this.looping = true;
-            axios.post('http://localhost:4800/api/game', { gameId: this.state.gameId })
+            axios.post(`http://${this.state.apiUrl}:4800/api/game`, { gameId: this.state.gameId })
               .then((res) => {
                 this.updateState();
                 if (!this.state.state.isFinished && this.looping) {  // Stop looping when game is finished

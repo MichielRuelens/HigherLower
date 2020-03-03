@@ -21,7 +21,7 @@ class HigherLowerAPI:
         self.api.add_resource(GamesResource, '/api/games')
 
     def run(self):
-        self.app.run(host="0.0.0.0", port=4800)
+        self.app.run(host="0.0.0.0", port=4800, threaded=False)
 
 
 if __name__ == '__main__':
