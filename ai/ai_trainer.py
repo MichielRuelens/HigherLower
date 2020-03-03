@@ -3,7 +3,7 @@ from collections import defaultdict
 import numpy as np
 import tensorflow as tf
 
-from ai.ai_env import CanastaEnv
+from ai.ai_env import CanastaEnv, HigherLowerEnv
 from ai.model_configs.mlp_config import MLPConfig
 from ai.multi_layer_perceptron import MultiLayerPerceptron
 from base.actions.action_service import ActionService
@@ -99,7 +99,6 @@ def play_game(env, train_net, target_net, epsilon, copy_step, print_exp_step):
 
 
 def main():
-    env = CanastaEnv()
     cfg = MLPConfig()
     # ============ CONFIG PARAMETERS =============== #
     gamma = cfg.gamma
@@ -117,6 +116,7 @@ def main():
     min_epsilon = cfg.min_epsilon
     avg_rewards = cfg.avg_rewards
     # =============================================== #
+    env = HigherLowerEnv(cfg.num_actions, cfg.num_states)
     summary_writer = tf.summary.create_file_writer(cfg.log_dir)
     train_net = DQN(cfg, gamma, max_experiences, min_experiences, batch_size, lr)
     target_net = DQN(cfg, gamma, max_experiences, min_experiences, batch_size, lr)

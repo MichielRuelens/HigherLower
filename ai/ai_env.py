@@ -10,7 +10,7 @@ from base.actions.action_service import ActionService
 from base.enums.game_phase import GamePhase
 
 
-class CanastaEnv(Env):
+class HigherLowerEnv(Env):
     """
     An implementation of the OpenAI environment class for the Canasta game.
     """
