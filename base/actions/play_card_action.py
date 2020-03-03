@@ -50,4 +50,4 @@ class PlayCardAction(Action):
 
     def __str__(self):
         execution_tag = "" if not self.is_executed else "(E) "
-        return "{}Discard {}".format(execution_tag, self.card)
+        return "{}Play card {}".format(execution_tag, self.card)
