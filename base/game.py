@@ -16,7 +16,7 @@ from base.players.random_player import RandomPlayer
 
 class Game:
 
-    def __init__(self, keep_history: bool = True):
+    def __init__(self, keep_history: bool = False):
         self.players = None  # type: Optional[List[Player]]
         self.current_player_index = None
         self.board = None  # type: Optional[Board]
