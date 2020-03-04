@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Game from './components/game/Game';
+import Game from './components/game/game';
 import styles from './app.module.scss';
 import axios from 'axios';
 
@@ -9,8 +9,8 @@ class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-//            apiUrl: 'localhost',
-            apiUrl: 'ec2-35-158-144-118.eu-central-1.compute.amazonaws.com',
+            apiUrl: 'localhost',
+//            apiUrl: 'ec2-35-158-144-118.eu-central-1.compute.amazonaws.com',
             state: null,
             gameId: null,
             runningGames: [],
