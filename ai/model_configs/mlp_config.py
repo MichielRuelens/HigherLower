@@ -1,9 +1,11 @@
 import datetime
+import os
 
 from ai.model_configs.base_model_config import BaseModelConfig
 from ai.multi_layer_perceptron import MultiLayerPerceptron
 from base.actions.action_service import ActionService
 from base.game_state import GameState
+from config import Config
 
 
 class MLPConfig(BaseModelConfig):
@@ -35,11 +37,11 @@ class MLPConfig(BaseModelConfig):
     @property
     def log_dir(self) -> str:
         current_time = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
-        return 'logs/{}/{}'.format(self.name, current_time)
+        return os.path.join(Config().project_root, 'logs', self.name, current_time)
 
     @property
     def save_path(self) -> str:
-        return "ai/models/{}".format(self.name())
+        return os.path.join(Config().project_root, "ai", "models", self.name())
 
     def name(self):
         return "MLPConfig"
