@@ -18,13 +18,14 @@ if __name__ == '__main__':
 
     winners = defaultdict(int)
     score_deltas = []
-    for i in range(1000):
+    game_id, game = game_runner.start_game()
+    for i in range(500):
         print("Playing game {}".format(i + 1))
-        game_id, game = game_runner.start_game()
         while not game.is_finished():
             game.play_single_step()
         winner, delta = get_winner(game)
         winners[winner.identifier] += 1
         score_deltas.append(delta)
+        game.reset_game(keep_players=True)
     print("Winners: {}".format(winners))
     print("With an average delta of {}".format(mean(score_deltas)))

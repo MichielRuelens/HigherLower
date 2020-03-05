@@ -24,21 +24,31 @@ class Game:
         self.history = GameHistory()
         self.initialized = False
 
-    def reset_game(self, initialize: bool = True, clear_history: bool = True):
-        self.players = None  # type: Optional[List[Player]]
+    def reset_game(self, initialize: bool = True, keep_players: bool = False, clear_history: bool = True) -> None:
+        """
+        Reset the current game.
+
+        :param initialize: if True, re-initialize the game after the reset
+        :param keep_players: if True, don't delete the player objects (can be useful for keeping AI models loaded)
+                             Note that hands are cleared even when the players are kept.
+        :param clear_history: if True, clear the history (if kept)
+        """
+        if not keep_players:
+            self.players = None  # type: Optional[List[Player]]
         self.current_player_index = None
         self.board = None  # type: Optional[Board]
         if clear_history:
             self.history.clear()
         self.initialized = False
         if initialize:
-            self.initialize_game()
+            self.initialize_game(initialize_players=not keep_players)
 
-    def initialize_game(self):
+    def initialize_game(self, initialize_players: bool = True):
         if not self.initialized:
             self.current_player_index = 0
             # Initialize players
-            self._initialize_players()
+            if initialize_players:
+                self._initialize_players()
             # Create new deck
             deck = self._create_deck()
             # Deal player hands
