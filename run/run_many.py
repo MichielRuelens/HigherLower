@@ -19,7 +19,7 @@ if __name__ == '__main__':
     winners = defaultdict(int)
     score_deltas = []
     game_id, game = game_runner.start_game()
-    for i in range(500):
+    for i in range(100):
         print("Playing game {}".format(i + 1))
         while not game.is_finished():
             game.play_single_step()

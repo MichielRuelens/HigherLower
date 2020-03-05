@@ -35,6 +35,10 @@ class Game:
         """
         if not keep_players:
             self.players = None  # type: Optional[List[Player]]
+        else:
+            # We're not killing the players, but they have to be reset (e.g. score set to 0)
+            for player in self.players:
+                player.reset()
         self.current_player_index = None
         self.board = None  # type: Optional[Board]
         if clear_history:
