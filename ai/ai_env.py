@@ -12,7 +12,7 @@ from base.enums.game_phase import GamePhase
 
 class HigherLowerEnv(Env):
     """
-    An implementation of the OpenAI environment class for the Canasta game.
+    An implementation of the OpenAI environment class for the HigherLower game.
     """
 
     def __init__(self, num_actions, state_size):
