@@ -10,22 +10,22 @@ class MLPConfig(BaseModelConfig):
 
     def __init__(self):
         # Model params
-        self.hidden_units = [200, 200]
+        self.hidden_units = [64, 64]
         # Environment params
         self.num_states = GameState.SIZE
         self.num_actions = ActionService().num_actions
         # Training params
         self.gamma = 0.99
-        self.copy_step = 25
+        self.copy_step = 20
         self.print_exp_step = 100000000
-        self.max_experiences = 10000
-        self.min_experiences = 100
-        self.batch_size = 32
+        self.max_experiences = 1000
+        self.min_experiences = 16
+        self.batch_size = 4
         self.lr = 1e-2
-        self.number_iterations = 1000
+        self.number_iterations = 2000
         self.epsilon = 0.99
-        self.decay = 0.995
-        self.min_epsilon = 0.1
+        self.decay = 0.9994  # This decay makes it so that after 1000 iterations epsilon is 50%
+        self.min_epsilon = 0.05
         self.avg_rewards = 0
 
     @property

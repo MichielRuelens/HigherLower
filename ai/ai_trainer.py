@@ -104,7 +104,6 @@ def main():
     gamma = cfg.gamma
     copy_step = cfg.copy_step
     print_exp_step = cfg.print_exp_step
-    hidden_units = cfg.hidden_units
     max_experiences = cfg.max_experiences
     min_experiences = cfg.min_experiences
     batch_size = cfg.batch_size

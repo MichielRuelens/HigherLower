@@ -67,6 +67,16 @@ class HigherLowerEnv(Env):
         self.curr_step += 1
         self._take_action(action, action_idx)
         reward = action.get_reward()
+        # If the game is over and the last player who played a card is the winner, add a winning bonus to the reward
+        # Note that at this point the 'current player' is not the player who took the last action,
+        # since _take_action() already swapped the current player.
+        if self.game.is_finished():
+            player0 = self.game.players[0]
+            player1 = self.game.players[1]
+            if self.game.current_player == player0 and player0.score < player1.score:
+                reward += 100
+            if self.game.current_player == player1 and player0.score > player1.score:
+                reward += 100
         observation = self._get_state()
         return observation, reward, self.game.is_finished(), {}
 
