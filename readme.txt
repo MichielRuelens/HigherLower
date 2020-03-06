@@ -7,7 +7,7 @@ cd <project>/frontend
 
 # Then run the scripts as:
 npm run dev
-npm run prod
+npm run build
 
 # Running the backend API
 venv/Scripts/python run/run_api.py

@@ -1,7 +1,8 @@
-from typing import List, TYPE_CHECKING
+from typing import List, TYPE_CHECKING, Union
 
 from base.board import Board
 from base.cards.card_encoder import CardEncoder
+import numpy as np
 
 
 if TYPE_CHECKING:
@@ -21,7 +22,7 @@ class GameState:
         self.players = players
         self.current_player_index = current_player_index
 
-    def create_numeral_representation(self, player: 'Player') -> List[int]:
+    def create_numeral_representation(self, player: 'Player', as_array: bool = True) -> Union[List[int], np.array]:
         """
         Create a numerical representation of (a subset of) the game state for the specified player.
 
@@ -36,6 +37,8 @@ class GameState:
         representation.extend(self._deck_num_cards_representation())
         representation.extend(self._get_own_score_representation(player=player))
         representation.extend(self._get_other_players_score_representation(player=player))
+        if as_array:
+            representation = np.array(representation, dtype=np.float32)
         return representation
 
     @staticmethod

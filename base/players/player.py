@@ -29,6 +29,10 @@ class Player(metaclass=ABCMeta):
         """
         raise NotImplementedError
 
+    def reset(self):
+        self.hand = None
+        self.score = 0
+
     def play_single_step(self, game_state: 'GameState', verbose: bool = False):
         """
         Play a single move based on the given GameState.
